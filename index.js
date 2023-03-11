@@ -26,8 +26,50 @@ async function run() {
     const complainCollection = client
       .db("cityComplain")
       .collection("complains");
+    const userCollection = client.db("cityComplain").collection("user");
 
     // // // // // // // // // // // //
+
+    //  *********  User  ********//
+
+    // create and update User
+    //create and update a user
+    app.put("/create-user/:email", async (req, res) => {
+      const email = req.params.email;
+      const user = req.body;
+
+      const filter = { email: email };
+      const options = { upsert: true };
+
+      const updatedDoc = {
+        $set: user,
+      };
+
+      const result = await userCollection.updateOne(
+        filter,
+        updatedDoc,
+        options
+      );
+      res.send(result);
+    });
+    //get all users from db
+    app.get("/users", async (req, res) => {
+      const query = {};
+
+      const cursor = userCollection.find(query);
+      const users = await cursor.toArray();
+
+      res.send(users);
+    });
+
+    // all User filter by email category
+    app.get("/user/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email };
+      const cursor = userCollection.find(query);
+      const user = await cursor.toArray();
+      res.send(user);
+    });
 
     //  *********  Complain  ********//
 
