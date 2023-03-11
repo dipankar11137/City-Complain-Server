@@ -87,6 +87,13 @@ async function run() {
       const result = await complainCollection.insertOne(newComplain);
       res.send(result);
     });
+    // // Delete one complain
+    app.delete("/complains/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await complainCollection.deleteOne(query);
+      res.send(result);
+    });
 
     // // // post User
     // app.post("/user", async (req, res) => {
