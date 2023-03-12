@@ -95,6 +95,23 @@ async function run() {
       res.send(result);
     });
 
+    //  Complain filter by email
+    app.get("/complains/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email };
+      const cursor = complainCollection.find(query);
+      const user = await cursor.toArray();
+      res.send(user);
+    });
+    //  Complain filter by Division
+    app.get("/complain/:division", async (req, res) => {
+      const division = req.params.division;
+      const query = { division };
+      const cursor = complainCollection.find(query);
+      const user = await cursor.toArray();
+      res.send(user);
+    });
+
     // // // post User
     // app.post("/user", async (req, res) => {
     //   const newProduct = req.body;
