@@ -119,6 +119,14 @@ async function run() {
       const result = await reviewCollection.insertOne(newComplain);
       res.send(result);
     });
+    //  Review filter by email
+    app.get('/review/:email', async (req, res) => {
+      const email = req.params.email;
+      const query = { email };
+      const cursor = reviewCollection.find(query);
+      const user = await cursor.toArray();
+      res.send(user);
+    });
   } finally {
   }
 }
