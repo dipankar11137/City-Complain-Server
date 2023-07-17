@@ -24,9 +24,10 @@ async function run() {
     await client.connect();
     // console.log("database connect");
     const complainCollection = client
-      .db("cityComplain")
-      .collection("complains");
-    const userCollection = client.db("cityComplain").collection("user");
+      .db('cityComplain')
+      .collection('complains');
+    const userCollection = client.db('cityComplain').collection('user');
+    const reviewCollection = client.db('cityComplain').collection('review');
 
     // // // // // // // // // // // //
 
@@ -34,7 +35,7 @@ async function run() {
 
     // create and update User
     //create and update a user
-    app.put("/create-user/:email", async (req, res) => {
+    app.put('/create-user/:email', async (req, res) => {
       const email = req.params.email;
       const user = req.body;
 
@@ -53,7 +54,7 @@ async function run() {
       res.send(result);
     });
     //get all users from db
-    app.get("/users", async (req, res) => {
+    app.get('/users', async (req, res) => {
       const query = {};
 
       const cursor = userCollection.find(query);
@@ -63,7 +64,7 @@ async function run() {
     });
 
     // all User filter by email category
-    app.get("/user/:email", async (req, res) => {
+    app.get('/user/:email', async (req, res) => {
       const email = req.params.email;
       const query = { email };
       const cursor = userCollection.find(query);
@@ -75,20 +76,21 @@ async function run() {
 
     // get complains
 
-    app.get("/complains", async (req, res) => {
+    app.get('/complains', async (req, res) => {
       const query = {};
       const cursor = complainCollection.find(query);
       const result = await cursor.toArray();
       res.send(result);
     });
     // post Complains
-    app.post("/complains", async (req, res) => {
+    app.post('/complains', async (req, res) => {
       const newComplain = req.body;
       const result = await complainCollection.insertOne(newComplain);
       res.send(result);
     });
+
     // // Delete one complain
-    app.delete("/complains/:id", async (req, res) => {
+    app.delete('/complains/:id', async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
       const result = await complainCollection.deleteOne(query);
@@ -96,7 +98,7 @@ async function run() {
     });
 
     //  Complain filter by email
-    app.get("/complains/:email", async (req, res) => {
+    app.get('/complains/:email', async (req, res) => {
       const email = req.params.email;
       const query = { email };
       const cursor = complainCollection.find(query);
@@ -104,12 +106,18 @@ async function run() {
       res.send(user);
     });
     //  Complain filter by Division
-    app.get("/complain/:division", async (req, res) => {
+    app.get('/complain/:division', async (req, res) => {
       const division = req.params.division;
       const query = { division };
       const cursor = complainCollection.find(query);
       const user = await cursor.toArray();
       res.send(user);
+    });
+    // post review
+    app.post('/review', async (req, res) => {
+      const newComplain = req.body;
+      const result = await reviewCollection.insertOne(newComplain);
+      res.send(result);
     });
   } finally {
   }
