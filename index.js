@@ -110,8 +110,16 @@ async function run() {
       const division = req.params.division;
       const query = { division };
       const cursor = complainCollection.find(query);
-      const user = await cursor.toArray();
-      res.send(user);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+    //  Complain filter by Division
+    app.get('/complainDate/:date', async (req, res) => {
+      const date = req.params.date;
+      const query = { date };
+      const cursor = complainCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
     });
     // post review
     app.post('/review', async (req, res) => {
