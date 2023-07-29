@@ -11,8 +11,9 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.rasbpcm.mongodb.net/?retryWrites=true&w=majority`;
-
+// const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.rasbpcm.mongodb.net/?retryWrites=true&w=majority`;
+const uri =
+  'mongodb+srv://city_complain:b5U6JlZynigGFBAK@cluster0.wly1h4d.mongodb.net/?retryWrites=true&w=majority';
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
