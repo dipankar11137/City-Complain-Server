@@ -11,9 +11,10 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.rasbpcm.mongodb.net/?retryWrites=true&w=majority`;
-const uri =
-  'mongodb+srv://city_complain:b5U6JlZynigGFBAK@cluster0.wly1h4d.mongodb.net/?retryWrites=true&w=majority';
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.evn2ej1.mongodb.net/?retryWrites=true&w=majority`;
+// const uri =
+//   'mongodb+srv://city_complain:b5U6JlZynigGFBAK@cluster0.wly1h4d.mongodb.net/?retryWrites=true&w=majority';
+
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -114,7 +115,15 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     });
-    //  Complain filter by Division
+    //  Complain filter by district
+    app.get('/complainDistrict/:district', async (req, res) => {
+      const district = req.params.district;
+      const query = { district };
+      const cursor = complainCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+    //  Complain filter by date
     app.get('/complainDate/:date', async (req, res) => {
       const date = req.params.date;
       const query = { date };
@@ -135,6 +144,41 @@ async function run() {
       const cursor = reviewCollection.find(query);
       const user = await cursor.toArray();
       res.send(user);
+    });
+    // update process
+    app.put('/processing/:id', async (req, res) => {
+      const id = req.params.id;
+      const updatePayment = req.body;
+      const query = { _id: ObjectId(id) };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          processing: updatePayment.processing,
+        },
+      };
+      const result = await complainCollection.updateOne(
+        query,
+        updateDoc,
+        options
+      );
+      res.send(result);
+    });
+    app.put('/done/:id', async (req, res) => {
+      const id = req.params.id;
+      const updatePayment = req.body;
+      const query = { _id: ObjectId(id) };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          done: updatePayment.done,
+        },
+      };
+      const result = await complainCollection.updateOne(
+        query,
+        updateDoc,
+        options
+      );
+      res.send(result);
     });
   } finally {
   }
